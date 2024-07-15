@@ -9,15 +9,19 @@ public interface UserDataDAO {
 
     void save(UserDataEntity userDataEntity);
 
-    UserDataEntity findById(Integer id);
+    UserDataEntity findById(Long id);
 
     List<UserDataEntity> findAll();
 
-    void update(UserDataEntity theStudent);
+    UserDataEntity update(UserDataEntity userDataEntity);
 
-    void delete(Integer id);
+    void delete(Long id);
 
     int deleteAll();
 
     UserDataEntity findByName(String firstName, String lastName);
-}
+
+    UserDataEntity updateLastNameById(Long id, String newLastName);
+    int updateLastNamebyLastName(String oldLastName, String newLastName) ;
+
+    }

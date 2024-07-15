@@ -1,11 +1,13 @@
 package com.commestack.coreplatform.objects.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.sql.Date;
 
 @Entity
 @Table(name = "user_data")
+@Data
 public class UserDataEntity {
 
     @Id
@@ -48,23 +50,6 @@ public class UserDataEntity {
     public UserDataEntity(String username , String password){
         this.username = username;
         this.password = password;
-    }
-
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     @Override

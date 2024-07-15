@@ -3,12 +3,16 @@ package com.commestack.coreplatform.repositories.DAOImpl;
 import com.commestack.coreplatform.objects.entity.UserDataEntity;
 import com.commestack.coreplatform.repositories.DAO.UserDataDAO;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import jakarta.persistence.TypedQuery;
 
 import java.util.List;
+
+
+//Any method that will do a write op should have an annotation of Transactional
 
 @Repository
 public class UserDataDAOImpl implements UserDataDAO {
@@ -29,7 +33,7 @@ public class UserDataDAOImpl implements UserDataDAO {
     }
 
     @Override
-    public UserDataEntity findById(Integer id) {
+    public UserDataEntity findById(Long id) {
         return entityManager.find(UserDataEntity.class, id);
     }
 
@@ -45,13 +49,14 @@ public class UserDataDAOImpl implements UserDataDAO {
 
     @Override
     @Transactional
-    public void update(UserDataEntity theStudent) {
-        entityManager.merge(theStudent);
+    public UserDataEntity update(UserDataEntity theStudent) {
+
+        return   entityManager.merge(theStudent);
     }
 
     @Override
     @Transactional
-    public void delete(Integer id) {
+    public void delete(Long id) {
 
         // retrieve the student
         UserDataEntity theStudent = entityManager.find(UserDataEntity.class, id);
@@ -80,6 +85,38 @@ public class UserDataDAOImpl implements UserDataDAO {
 
         // return query results
         return theQuery.getResultList().get(0);
+
+    }
+
+    @Override
+    public UserDataEntity updateLastNameById(Long id, String newLastName) {
+
+        UserDataEntity userDataEntity=entityManager.find(UserDataEntity.class, id);
+        userDataEntity.setLastName(newLastName);
+
+        return update(userDataEntity);
+    }
+
+    @Transactional
+    public int updateLastNamebyLastName(String oldLastName, String newLastName) {
+
+        //same concept applied to the delete operation
+        Query theQuery = entityManager.createQuery("UPDATE UserDataEntity SET lastName = :newLastName WHERE lastName = :oldLastName");
+        theQuery.setParameter("oldLastName", oldLastName);
+        theQuery.setParameter("newLastName", newLastName);
+        int rowsUpdated = theQuery.executeUpdate();
+
+        return rowsUpdated;
+    }
+
+
+    public void remove(UserDataEntity userDataEntity) {
+
+    }
+    @Transactional
+    public void deleteUserById(Long id) {
+        UserDataEntity userDataEntity=entityManager.find(UserDataEntity.class, id);
+        entityManager.remove(userDataEntity);
 
     }
 }
